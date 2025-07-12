@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+label{margin-left: 10px;font-size: 20px;margin-top: 0px;margin-bottom: 0px;}
+#id_which_place{display: flex;flex-direction: row;}
+.prihov:hover{border-color:#2563EB ;cursor: pointer;text-indent: 5px;}
+.prihov{text-indent: 5px;background-color: #374151;;border-width: 2px;border-radius: 8px;margin-bottom: 5px;height: 45px;font-size: 20px;width: 100%;color: #FFFFFF;padding-top: 15px;}
+h2:hover{background-color:#2563EB ;}
+body,html{height: 100vh;}
+*{box-sizing: border-box;margin: 0;padding: 0;}
+.container1{display:flex;height: calc(100vh - 170.5px);margin-top: 0%;}
+h2{height:45px;font-size: 20px;padding-top: 15px;text-indent: 5px;margin-bottom:5px ;border-radius: 8px;margin-top: 0px;background-color: #1D4ED8;color: #FFFFFF;}
+#frbutton,#addbutton{height:45px;font-size: 20px;margin-left: 1px;margin-right: 2px;width: 100%;text-align: left;padding-top: 15px;text-indent: 5px;margin-bottom:5px ;border-radius: 8px;margin-top: 0px;background-color: #2563EB;color: #FFFFFF;}
+.container2{display: flex;height: 100vh;}
+input[name='textName'],input[name='path']{border-radius: 4px;margin-bottom: 0px;margin-top: 0px;margin-left: 20px;margin-right: 20px;text-indent: 5px;background-color: #374151;color: #FFEBCD;height: 30px;margin-top: 0px;}
+input[type='submit']{height: 30px;font-size:17px;width: 90px;display: block;margin-left: auto;margin-right: 20px;margin-bottom: 5px;background-color: rgb(0, 119, 255);color: white;border-radius: 5px;}
+/*.box1{width:10%;background-color: #666;color:;}*/
+.box2{display: flex;flex-direction: column;background-color:#1a202c;color: #dcdcdd;;width: 100%;;height: 98vh;border-radius: 10px;}
+.box3{width: 16%;background-color: #1a202c;color: blanchedalmond;padding: 5px;margin: 10px;border-radius: 10px;margin-top: 10px;}
+.footer{background-color: #666;height: 50px;}
+textarea{width: 100%;outline: none;border-radius: 8px;border-top-left-radius:0;border-bottom-left-radius:0;height: 40%;padding:10px;background-color:lightsteelblue;color: #000;;margin: 10px;font-size: 16px;resize: none;overflow:auto;white-space: pre;scroll-behavior: smooth;}
+
+</style>
+
+<script>
+   window.addEventListener("DOMContentLoaded",function(){
+      const tx=document.getElementById("TextForm_Text");
+      const ln=document.getElementById("linenumbers");
+      function updatelines(){
+         const lines=tx.value.split('\n').length;
+         ln.innerHTML=Array(lines).fill(0).map((_,i)=>i+1).join('<br>')
+      }
+      tx.addEventListener("input",updatelines);
+      tx.addEventListener("scroll",()=>ln.scrollTop=tx.scrollTop);
+      updatelines();
+   })
+   window.addEventListener("load",function(){
+      var tabcount=localStorage.getItem("tabcount")||0;
+      localStorage.setItem("tabcount",++tabcount);
+   });
+   window.addEventListener("unload",function(){
+      var tabcount=localStorage.getItem("tabcount")||0;
+      localStorage.setItem("tabcount",--tabcount);
+      SetTimeOut(function(){
+         if (localStorage.getItem("tabcount")<=0){
+            fetch('/shutdown',{method:"POST"} )
+            } 
+            },100)
+         })
+   function copyAndSubmit(){
+      var textformvalue=document.getElementById("TextForm_Text").value;
+      var textformpath=document.getElementById("TextForm_Path").value;
+      var textformextension=document.getElementById("TextForm_Extension").value;
+      var textformname=document.getElementById("TextForm_TextName").value;
+
+      document.getElementById("CopyForm_Text").value=textformvalue;
+      document.getElementById("CopyForm_Path").value=textformpath;
+      document.getElementById("CopyForm_Extension").value=textformextension;
+      document.getElementById("CopyForm_TextName").value=textformname;
+     
+      document.getElementById("CopyForm").submit();
+   }
+
+   function deleteandsubmit(){
+      var textformpath=document.getElementById("TextForm_Path").value;
+      var textformextension=document.getElementById("TextForm_Extension").value;
+      var textformname=document.getElementById("TextForm_TextName").value;
+
+      document.getElementById("DeleteForm_Path").value=textformpath;
+      document.getElementById("DeleteForm_Extension").value=textformextension;
+      document.getElementById("DeleteForm_TextName").value=textformname;
+
+      document.getElementById("DeleteForm").submit();
+   }
+   
+   function replaceandsubmit(){
+      var textformpath=document.getElementById("TextForm_Path").value;
+      var textformextension=document.getElementById("TextForm_Extension").value;
+      var textformname=document.getElementById("TextForm_TextName").value;
+
+      document.getElementById("ReplaceForm_Path").value=textformpath;
+      document.getElementById("ReplaceForm_Extension").value=textformextension;
+      document.getElementById("ReplaceForm_TextName").value=textformname;
+
+      document.getElementById("ReplaceForm").submit();
+   }
+
+   function findreplaceandsubmit(a){
+      var textformvalue=document.getElementById("TextForm_Text").value;
+      document.getElementById(a).value=textformvalue;
+   }
+
+</script>
+
+</head>
+<div style="background-color: #2d3748;">
+<div class="container2">
+<div class="box3"> 
+   <h2 onclick="copyAndSubmit()" style="margin-top: 0%;">Save Text</h2>
+   <h2 onclick="replaceandsubmit()">Replace Text</h2>
+   <h2 onclick="deleteandsubmit()">Delete Text</h2>
+   <form id="ReplForm" action="http://localhost:5000/findreplace" method="post">
+      {{findreplace_form.hidden_tag()}}
+      <!-- <input type="text" placeholder="Element To Be Replaced" class="prihov">-->
+      {{findreplace_form.FirstElement(class="prihov",placeholder="Element To Be Replaced")}}
+      <!--<input type="text" placeholder="Element to Replace" class="prihov">-->
+      {{findreplace_form.SecondElement(class="prihov",placeholder="Element To Replace")}}
+      {{findreplace_form.Text(id="FindReplaceForm_Text",style="display:none;")}}
+      <!--<h2 style="background-color: #2563EB;color: #FFFFFF;">Replace All</h2>-->
+      {{findreplace_form.save(id="frbutton", style="background-color: #1D4ED8;color: #FFFFFF;",onclick="findreplaceandsubmit('FindReplaceForm_Text')")}}
+   </form>
+   <form id="FindForm" action="http://localhost:5000/find" method="post">
+            <input type="text" placeholder="Find Element" class="prihov">
+            <h2 style="color: #FFFFFF;background-color: #1D4ED8;">Find</h2>
+   </form>
+   <form id="CopyFile" action="http://localhost:5000/cpfile" method="post">
+            {{add_form.hidden_tag()}}
+            <!--<input type="text" placeholder="File Address" class="prihov">-->
+            {{add_form.Path(class="prihov",placeholder="File Address")}}
+            <!--<input type="radio" id="START" value="Start" name="place" style="margin: 5px;">-->
+            <div id="add_which_place">
+            {% for i in add_form.Choice %}
+            <label style="margin: 5px;margin-top: 10px;margin-bottom: 10px;font-size: 20px;">
+               {{i()}} {{i.label.text}}
+            </label>
+            {% endfor %}
+            </div>
+            <!--<label for="START" style="font-size: 25px;">Start</label>   <br>-->
+            <!--<input type="radio" id="END" value="End" name="place" style="margin: 5px;">-->
+            <!--<label for="END" style="font-size: 25px;">End</label>-->
+            {{add_form.Text(id="AddForm_Text",style="display:none;")}}
+            <!--<h2 style="color: #FFFFFF;background-color: #2563EB;">Copy Text</h2>-->
+            {{add_form.save(id="addbutton",style="color: #FFFFFF;background-color: #1D4ED8;height:45px;padding-top: 15px;text-indent: 5px;margin-bottom:5px ;border-radius: 8px;margin-top: 0px;",onclick="findreplaceandsubmit('AddForm_Text')")}}
+   </form>
+   <h2>Full Page</h2>
+   <a href="http://127.0.0.1:5000/create" style="text-decoration: none;color: blanchedalmond;"><h2>Create New File</h2></a>
+   <a href="http://127.0.0.1:5000/" style="text-decoration: none;color: blanchedalmond;"><h2>Home</h2></a>
+</div>
+<div style="width: 83%;margin: 10px;border-radius: 10px;">
+<!--<h1 style="background-color: #666;font-size: 45px;padding: 35px;text-align: center;color: aliceblue;margin-bottom: 0;">NOTEPAD</h1>-->
+<div class="container1">
+<!--<div class="box1"></div>-->
+<form class="box2" action="http://localhost:5000/create" method="post">
+   {{text_form.hidden_tag()}}<br>
+   <label for="TextName"> {{text_form.textName.label}} </label>
+   {{text_form.textName(id="TextForm_TextName")}}             <br>
+   <label for="Path">{{text_form.path.label}} </label>
+   {{text_form.path(id="TextForm_Path")}}<br>
+   <label for="Extension">{{text_form.Extension.label}}</label>
+   {{text_form.Extension(id="TextForm_Extension",style="border-radius: 4px;margin-left: 20px;margin-right: 20px;text-indent: 5px;background-color: #374151;color: #FFEBCD;height: 30px;margin-top: 0px;")}}<br>
+   <div style="display: flex;overflow: hidden;height: 63%;margin-top: 0px;">
+   <div id="linenumbers" style="color:#6b7280;outline: none;border-top-left-radius: 8px;border-bottom-left-radius: 8px;margin-left: 20px;margin-right: 0px;margin-top: 9px;line-height: 1.5;background-color:#2d3748;padding: 10px 5px;height: 100%;width: 40px;;font-size: 16px;text-align: right;user-select: none;overflow: hidden;"></div>
+   {{text_form.Text(id="TextForm_Text", style="height:100%;margin-left:0px;margin-right:20px;border:none;line-height:1.5;font-size:16px;padding:10px;resize:none;overflow:auto;white-space:pre; ")}}
+   </div>
+   <div style="margin-top: 10px;margin-bottom: 0;">
+   {{text_form.submit}}
+   </div>
+</form>
+<!--<div class="box1"></div>-->
+</div>
+<form id="CopyForm" action="http://localhost:5000/copy" method="post">
+{{copy_form.hidden_tag()}}
+{{copy_form.Text(id="CopyForm_Text", style="display:none;")}}
+{{copy_form.Path(id="CopyForm_Path", style="display:none")}}
+{{copy_form.Extension(id="CopyForm_Extension", style="display:none")}}
+{{copy_form.TextName(id="CopyForm_TextName", style="display:none")}}
+</form>
+<form id="DeleteForm" action="http://localhost:5000/delete" method="post">
+   {{delete_form.hidden_tag()}}
+   {{delete_form.Path(id="DeleteForm_Path", style="display:none")}}
+   {{delete_form.Extension(id="DeleteForm_Extension", style="display:none")}}
+   {{delete_form.TextName(id="DeleteForm_TextName", style="display:none")}}
+</form>
+<form id="ReplaceForm" action="http://localhost:5000/replace" method="post">
+   {{replace_form.hidden_tag()}}
+   {{replace_form.Path(id="ReplaceForm_Path", style="display:none")}}
+   {{replace_form.Extension(id="ReplaceForm_Extension", style="display:none")}}
+   {{replace_form.TextName(id="ReplaceForm_TextName", style="display:none")}}
+</form>
+<!--<div class="footer"></div>-->
+</div>
+</div>
+</div>
+
+</html>

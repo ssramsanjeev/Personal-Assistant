@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin: 0; padding: 0; box-sizing: border-box;}
+/*h4:hover{background-color: aqua;font-size: 25px;}*/
+h4{font-size: 20px;}
+#box1:hover{background-color: #1e40af;transform: scale(1.05);}
+#box2:hover{background-color: #6b21a8;transform: scale(1.05);}
+#box4:hover{background-color: #047857;transform: scale(1.05);}
+#box1{background-color: #2563EB;transition:background-color 0.3s ease-in-out, transform 0.3s ease-in-out;}
+#box2{background-color: #9333ea;transition:background-color 0.3s ease-in-out, transform 0.3s ease-in-out;}
+#box4{background-color: #059669;transition:background-color 0.3s ease-in-out, transform 0.3s ease-in-out;}
+body, html { height: 95vh;font-family: Arial, sans-serif;}
+.container { display: flex;flex-direction: row;}
+.box{color: #FFFFFF;font-size: 35px;border-radius: 10px;padding-top: 27px;text-align: justify;width: 100%;padding-left: 10%;box-sizing: border-box;height: 100px;}
+.box3 {width: 45%;padding-left: 230px;box-sizing: border-box;padding-top: 25px;margin-left: -30px;}
+/*.footer {background-color: #666;height: calc(100vh - 200px);}*/
+</style>
+</head>
+
+<body style="background-color: #1a202c;">
+  <div style="height: 90vh;width: 90%;border-radius: 10px;background-color: #2d3748;margin-top: 5vh;margin-left: 5%;">
+    <h1 style="color: #63b3ed;text-align: center;font-size: 70px;padding-top:100px;padding-bottom: 100px;">Welcome to Notepad!</h1>
+    <p style="color: #d1d5db;font-size: 30px;text-align: center;padding-bottom: 50px;">Choose an option from the sidebar to get started.</p>
+  <div class="container">
+    <div class="box3">
+      <a href="http://127.0.0.1:5000/create" style="text-decoration: none;"><h4 class="box" id="box1" style="padding-left: 60px;">Create new file</h4></a>
+    </div>
+    <div class="box3">
+      <a href="" style="color: blanchedalmond;text-decoration: none;"> <h4 class="box" id="box2" >Update existing file</h4></a>
+    </div>
+  </div>
+  <div class="box3" style="margin-left: 20%;color: #FFFFFF;">
+      <a href="" style="color: #FFFFFF;text-decoration: none;margin-left: 30px;"> <h4 class="box" id="box4" style="color: #FFFFFF;font-size: 33px;" >Automate Python file</h4></a>
+  </div>
+  <!--<div class="footer"></div>-->
+  </div>
+</body>
+</html>
